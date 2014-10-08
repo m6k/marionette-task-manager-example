@@ -52,4 +52,22 @@ class Container
 	}
 
 
+	protected function newDb()
+	{
+		$db = new \PDO(
+			$this->mysqlPdoConnectionString,
+			$this->mysqlUser,
+			$this->mysqlPassword
+		);
+		$db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+		return $db;
+	}
+
+
+	protected function newMysqlTaskStorage()
+	{
+		return new MysqlTaskStorage($this->db);
+	}
+
+
 }

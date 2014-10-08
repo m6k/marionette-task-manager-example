@@ -1,2 +1,3 @@
 /vendor/
 /conf/local.json
+/www/phpinfo.php

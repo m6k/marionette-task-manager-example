@@ -29,7 +29,6 @@ Dependencies:
 
 ## Todo
 
-1. mysql storage
 1. deploy to vps, publish git repo read only over http?
 
 -- release ---

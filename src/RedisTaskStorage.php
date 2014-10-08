@@ -57,7 +57,7 @@ class RedisTaskStorage implements TaskStorage
 
 	public function trackTime(Task $task, TaskTime $time)
 	{
-		$this->predis->lpush(
+		$this->predis->rpush(
 			self::KEY_TASK_TIME . $task->id,
 			json_encode($time)
 		);

@@ -8,7 +8,11 @@ require_once __DIR__ .'/vendor/autoload.php';
 
 function readConfigFile($name)
 {
-	return json_decode(file_get_contents(__DIR__ . "/conf/$name.json"), true);
+	$config = json_decode(file_get_contents(__DIR__ . "/conf/$name.json"), true);
+	if ($config === null) {
+		throw new \Exception("Config $name.json syntax error");
+	}
+	return $config;
 }
 
 /**

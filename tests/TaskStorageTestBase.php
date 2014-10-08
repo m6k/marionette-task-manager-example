@@ -2,26 +2,9 @@
 
 namespace Tm;
 
-require_once __DIR__ .'/TaskStorageTestBase.php';
-
-class RedisTaskStorageTest extends TaskStorageTestBase
+abstract class TaskStorageTestBase extends \PHPUnit_Framework_TestCase
 {
-	private $predis;
-
-	public function setUp()
-	{
-		$container =  new Container(loadConfig());
-
-		$this->predis = $container->predis;
-		$this->tasks = $container->redisTaskStorage;
-
-		if (!$container->devel) {
-			throw new \Exception("Tests can run only on devel environment, they clear data");
-		}
-
-		$this->predis->flushdb();
-	}
-
+	protected $tasks;
 
 	public function testNoTasksInitailly()
 	{
@@ -129,6 +112,26 @@ class RedisTaskStorageTest extends TaskStorageTestBase
 		$this->assertSame(5, $tasks[0]->totalHours);
 	}
 
+	public function testListTrackedTimeList()
+	{
+		$task = $this->tasks->create(new Task(array(
+			'title' => 'a',
+		)));
+		$this->tasks->trackTime($task, new TaskTime(array(
+			'date' => 'd-a',
+			'hours' => 3,
+		)));
+		$this->tasks->trackTime($task, new TaskTime(array(
+			'date' => 'd-b',
+			'hours' => 2,
+		)));
+
+		$times = $this->tasks->taskTrackedTime($task);
+		$this->assertSame(2, count($times));
+		$this->assertSame('d-a', $times[0]->date);
+		$this->assertSame(3, $times[0]->hours);
+
+	}
 
 	public function testTrackedTimeWhenMoreTasks()
 	{
