@@ -39,9 +39,9 @@ $tasks = $container->taskStorage;
 
 
 <script type="text/template" id="editTaskView">
-	<p><a href="/tasks">Back to open tasks</a>
+	<p><a href="#tasks">Back to open tasks</a>
 
-	<h2><%- action %></h2>
+	<h2><%- pageTitle %></h2>
 
 	<p><label for="<%- cid %>TaskTitle">Task title:</label>
 		<input size="60" type="text" id="<%- cid %>TaskTitle" class="title"
@@ -51,12 +51,15 @@ $tasks = $container->taskStorage;
 		rows="5" cols="60" class="content"><%- content %></textarea>
 
 	<p><button class="save"><%- action %></button>
+		<% if (canClose) { %>
+			<button class="close">close task</button>
+		<% } %>
 </script>
 
 <script type="text/template" id="taskView">
-	<li><a href="/tasks/<%- id %>"><%- title %></a>
-		<!--<button class="edit">edit</button>
-		<button class="track">track</button>-->
+	<li><a href="#tasks/<%- id %>"><%- title %></a>
+		<button class="edit">edit</button>
+		<!--<button class="track">track</button>-->
 		<button class="close">close</button>
 </script>
 

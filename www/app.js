@@ -2,6 +2,7 @@
 
 var Tm = new Marionette.Application();
 
+
 Tm.Task = Backbone.Model.extend({
 	defaults: {
 		title: "new task",
@@ -11,6 +12,7 @@ Tm.Task = Backbone.Model.extend({
 	}
 });
 
+
 Tm.Tasks = Backbone.Collection.extend({
 	url: function () {
 		return Tm.apiUrl + '/tasks';
@@ -18,15 +20,22 @@ Tm.Tasks = Backbone.Collection.extend({
 	model: Tm.Task,
 });
 
+
 Tm.TaskView = Marionette.ItemView.extend({
 	template: '#taskView',
 	events: {
 		'click .close': 'close',
+		'click .edit': 'edit', // same action as clicking on task name
 	},
 	close: function () {
 		this.model.save({status: "closed"});
+		Tm.tasks.remove(this.model);
+	},
+	edit: function () {
+		Tm.router.navigate('/tasks/' + this.model.id, {trigger: true});
 	},
 });
+
 
 Tm.TasksView = Marionette.CompositeView.extend({
 	template: '#tasksView',
@@ -34,10 +43,12 @@ Tm.TasksView = Marionette.CompositeView.extend({
 	childView: Tm.TaskView,
 });
 
-Tm.EditTaskView = Marionette.ItemView.extend({
+
+Tm.EditOrCreateTaskView = Marionette.ItemView.extend({
 	template: '#editTaskView',
 	events: {
 		'click .save': 'save',
+		'click .close': 'close',
 	},
 	ui: {
 		title: '.title',
@@ -62,25 +73,48 @@ Tm.EditTaskView = Marionette.ItemView.extend({
 			},
 		});
 	},
+	close: function () {
+		this.model.save({status: "closed"});
+		Tm.tasks.remove(this.model);
+		Tm.router.navigate('/tasks', {trigger: true});
+	},
 });
 
-Tm.CreateTaskView = Tm.EditTaskView.extend({
+
+Tm.EditTaskView = Tm.EditOrCreateTaskView.extend({
 	templateHelpers: function () {
 		return {
-			cid: this.model.cid,
-			action: 'Create new task',
+			cid: this.model.id,
+			pageTitle: 'Edit task',
+			action: 'Save',
+			canClose: true,
 		};
 	},
 });
+
+
+Tm.CreateTaskView = Tm.EditOrCreateTaskView.extend({
+	templateHelpers: function () {
+		return {
+			cid: this.model.cid,
+			pageTitle: 'Create new task',
+			action: 'Create new task',
+			canClose: false,
+		};
+	},
+});
+
 
 
 Tm.Router = Marionette.AppRouter.extend({
 	appRoutes: {
 		'': 'index',
 		'tasks': 'tasks',
+		'tasks/:id': 'taskEdit',
 		'create': 'create',
 	},
 });
+
 
 Tm.Controller = Marionette.Controller.extend({
 	index: function () {
@@ -89,6 +123,21 @@ Tm.Controller = Marionette.Controller.extend({
 	tasks: function () {
 		Tm.content.show(new Tm.TasksView({
 			collection: Tm.tasks,
+		}));
+	},
+
+	taskEdit: function (id) {
+		console
+		var task = Tm.tasks.get(id);
+
+		if (!task) {
+			alert('task not found'); // superior error handling ftw
+			Tm.router.naviget('/tasks', {trigger: true});
+			return;
+		}
+
+		Tm.content.show(new Tm.EditTaskView({
+			model: task,
 		}));
 	},
 
@@ -101,6 +150,7 @@ Tm.Controller = Marionette.Controller.extend({
 		}));
 	},
 });
+
 
 Tm.addInitializer(function (options) {
 	console.log('starting app', options);
@@ -116,5 +166,5 @@ Tm.addInitializer(function (options) {
 		controller: this.controller
 	});
 
-	Backbone.history.start({pushState: true, root: "/"});
+	Backbone.history.start();
 });
