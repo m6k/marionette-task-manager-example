@@ -23,7 +23,7 @@ $app->post('/tasks', function () use ($app, $tasks) {
 
 	$data = json_decode($app->request->getBody(), true);
 
-	$app->render(200, (array)$tasks->create(new \Task($data)));
+	$app->render(200, (array)$tasks->create(new Task($data)));
 });
 
 
@@ -31,7 +31,7 @@ $app->put('/tasks/:id', function ($id) use ($app, $tasks) {
 
 	$data = json_decode($app->request->getBody(), true);
 
-	$app->render(200, (array)$tasks->save(new \Task($data)));
+	$app->render(200, (array)$tasks->save(new Task($data)));
 });
 
 
