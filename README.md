@@ -10,11 +10,13 @@ Dependencies:
 - decent browser, I think first thing to break will be IE 8 and trailing commas in object literals,
   this can be fixed by using CoffeeScript (and it would get me plus point..)
 
-<pre>
-$ cd task-manager
-$ composer install
-$ php -S 127.0.0.1:8080 -t www
-</pre>
+- to get composer dependencies (commands below must run from project root):
+
+	`composer install`
+
+- to run local server
+
+	`php -S 127.0.0.1:8080 -t www`
 
 ## Todo
 
@@ -33,4 +35,4 @@ $ php -S 127.0.0.1:8080 -t www
 1. react-js for js views instead of marionette views
 1. pushState so that urls does not use fragments
 1. coffeescript
-1. code sniffer / linter for both php and js
+1. code sniffer / linter for both php and js, minify js

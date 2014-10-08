@@ -4,5 +4,8 @@
   "moduleType": [
     "globals"
   ],
-  "private": true
+  "private": true,
+  "dependencies": {
+ 	"backbone.marionette": "2.2.1"
+  }
 }

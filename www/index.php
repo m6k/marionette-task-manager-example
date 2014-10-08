@@ -4,7 +4,6 @@
 $container = require __DIR__ .'/../bootstrap.php';
 $config = $container->config;
 $tasks = $container->taskStorage;
-
 $readmeHtml = \Michelf\Markdown::defaultTransform(
 	file_get_contents($container->rootDir.'/README.md')
 );
@@ -44,6 +43,21 @@ $readmeHtml = \Michelf\Markdown::defaultTransform(
 	<ul class="tasks"></ul>
 </script>
 
+<script type="text/template" id="noTasksView">
+No open tasks.
+</script>
+
+<script type="text/template" id="taskDetailView">
+	<p><a href="#tasks">Back to open tasks</a>
+
+	<h2>Task: <%- title %></h2>
+
+	<%= contentHtml %>
+
+	<p><button class="close">close</button>
+		<button class="edit">edit</button>
+</script>
+
 
 <script type="text/template" id="editTaskView">
 	<p><a href="#tasks">Back to open tasks</a>
@@ -58,15 +72,11 @@ $readmeHtml = \Michelf\Markdown::defaultTransform(
 		rows="5" cols="60" class="content"><%- content %></textarea>
 
 	<p><button class="save"><%- action %></button>
-		<% if (canClose) { %>
-			<button class="close">close task</button>
-		<% } %>
 </script>
 
 <script type="text/template" id="taskView">
 	<li><a href="#tasks/<%- id %>"><%- title %></a>
 		<button class="edit">edit</button>
-		<!--<button class="track">track</button>-->
 		<button class="close">close</button>
 </script>
 
