@@ -29,7 +29,6 @@ Dependencies:
 
 1. Maybe at least <em>some</em> styles?
 1. List closed tasks.
-1. Concurrency. Do not even think about opening this app in two browsers ;)
 1. Describe basic architectural decisions.
 1. hhvm. I would love to play with it for a while
 1. react-js for js views instead of marionette views

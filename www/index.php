@@ -46,6 +46,7 @@ $readmeHtml = \Michelf\Markdown::defaultTransform(
 
 <script type="text/template" id="taskView">
 	<li><a href="#tasks/<%- id %>"><%- title %></a>
+		(tracked hours: <%- totalHours %>)
 		<button class="edit">edit</button>
 		<button class="track">track time</button>
 		<button class="close">close</button>
@@ -62,6 +63,8 @@ $readmeHtml = \Michelf\Markdown::defaultTransform(
 	<h2>Task: <%- title %></h2>
 
 	<%= contentHtml %>
+
+	<p>Total tracked hours: <%- totalHours %>
 
 	<p><button class="edit">edit</button>
 		<button class="track">track time</button>
@@ -111,8 +114,12 @@ $readmeHtml = \Michelf\Markdown::defaultTransform(
 
 	<h2>Track time for: <%- title %></h2>
 
-	<p><label>Date: <input type="text" value="<%- date %>"></label>
-		<br><label>Number of hours: <input type="text" value="1"</label>
+	<p><label>Date:
+			<input type="text" class="date" value="<%- date %>">
+		</label>
+		<br><label>Number of hours:
+			<input type="text" class="hours" value="1">
+		</label>
 
 	<p><button class="track">Track</button>
 </script>

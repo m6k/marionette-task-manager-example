@@ -28,6 +28,9 @@ Tm.TaskView = Marionette.ItemView.extend({
 		'click .edit': 'edit',
 		'click .track': 'track',
 	},
+	modelEvents: {
+		change: 'render',
+	},
 	closeTask: function () {
 		this.model.save({status: "closed"});
 		Tm.tasks.remove(this.model);
@@ -173,7 +176,30 @@ Tm.TaskTrackView = Marionette.ItemView.extend({
 		return {
 			date: (new Date()).toDateString(),
 		}
-	}
+	},
+	events: {
+		'click .track': 'track',
+	},
+	track: function () {
+		var self = this;
+		$.ajax({
+			url: this.model.url() + '/time',
+			type: 'post',
+			contentType: 'application/json; charset=utf8',
+			data: JSON.stringify({
+				date: this.$('.date').val(),
+				hours: parseInt(this.$('.hours').val(), 10),
+			}),
+			success: function (data) {
+				// task data are returned back with computed totalHours
+				self.model.set(data);
+				Tm.router.navigate('/tasks/' + self.model.id, {trigger: true});
+			},
+			error: function () {
+				alert('Request failed.');
+			},
+		});
+	},
 });
 
 
