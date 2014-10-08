@@ -1,0 +1,17 @@
+
+<VirtualHost *:80>
+    ServerAlias task-manager.dev
+
+    DocumentRoot /Users/jan/vcs/task-manager/www
+
+	AddHandler php5-script .php
+	AddType text/html .php
+
+    DirectoryIndex index.php
+
+    <Directory /Users/jan/vcs/task-manager/www>
+		Order allow,deny
+		allow from all
+    </Directory>
+</VirtualHost>
+

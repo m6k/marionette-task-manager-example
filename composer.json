@@ -1,0 +1,17 @@
+{
+    "name": "jan/task-manager",
+    "authors": [
+        {
+            "name": "Jan Matousek",
+            "email": "jan@m6k.cz"
+        }
+    ],
+    "require": {
+    	"slim/slim": "2.*",
+        "tracy/tracy": "~2.2",
+        "predis/predis": "~1.0"
+    },
+    "autoload": {
+        "psr-4": {"Tm\\": "src/"}
+    }
+}

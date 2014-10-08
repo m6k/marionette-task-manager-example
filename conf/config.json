@@ -1,0 +1,4 @@
+{
+	"taskStorage": "redisTaskStorage",
+	"redisUri": "tcp://localhost:6379"
+}
