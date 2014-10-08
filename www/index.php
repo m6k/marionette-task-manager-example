@@ -25,7 +25,7 @@ $readmeHtml = \Michelf\Markdown::defaultTransform(
 		echo "\t\t<script src='$lib'></script>";
 	}
 ?>
-
+<link rel="stylesheet" href="/style.css" type="text/css">
 </head>
 
 <body>
@@ -40,11 +40,20 @@ $readmeHtml = \Michelf\Markdown::defaultTransform(
 
 	<h2>Open Tasks</h2>
 
-	<ul class="tasks"></ul>
+	<ul class="taskList"></ul>
 </script>
 
+
+<script type="text/template" id="taskView">
+	<li><a href="#tasks/<%- id %>"><%- title %></a>
+		<button class="edit">edit</button>
+		<button class="track">track time</button>
+		<button class="close">close</button>
+</script>
+
+
 <script type="text/template" id="noTasksView">
-No open tasks.
+	No open tasks.
 </script>
 
 <script type="text/template" id="taskDetailView">
@@ -54,8 +63,29 @@ No open tasks.
 
 	<%= contentHtml %>
 
-	<p><button class="close">close</button>
-		<button class="edit">edit</button>
+	<p><button class="edit">edit</button>
+		<button class="track">track time</button>
+		<button class="close">close</button>
+
+	<table class="timeTable loading">
+		<caption>Tracked time</caption>
+		<thead>
+			<tr><th>Date</th><th>Hours</th>
+		<tbody class="time">
+	</table>
+
+	<p class="loadingInfo">Loading tracked time...
+</script>
+
+
+<script type="text/template" id="taskTimeView">
+	<td><%- date %>
+	<td><%- hours %>
+</script>
+
+
+<script type="text/template" id="taskTimeEmptyView">
+	<td colspan="2" class="emptyTimeView">No time tracked.
 </script>
 
 
@@ -64,27 +94,36 @@ No open tasks.
 
 	<h2><%- pageTitle %></h2>
 
-	<p><label for="<%- cid %>TaskTitle">Task title:</label>
-		<input size="60" type="text" id="<%- cid %>TaskTitle" class="title"
+	<p><label>Task title:
+		<input size="60" type="text" class="title"
 			value="<%- title %>">
-	<p><label for="<%- cid %>TaskContent">Content:</label>
-	<br><textarea id="<%- cid %>TaskContent"
-		rows="5" cols="60" class="content"><%- content %></textarea>
+	<p><label>Content:
+		<br><textarea rows="5" cols="60" class="content"><%- content %></textarea>
+		</label>
 
 	<p><button class="save"><%- action %></button>
 </script>
 
-<script type="text/template" id="taskView">
-	<li><a href="#tasks/<%- id %>"><%- title %></a>
-		<button class="edit">edit</button>
-		<button class="close">close</button>
+
+<script type="text/template" id="taskTrackView">
+	<p><a href="#tasks">Back to open tasks</a>
+		<a href="#tasks/<%- id %>">Back to: <%- title %></a>
+
+	<h2>Track time for: <%- title %></h2>
+
+	<p><label>Date: <input type="text" value="<%- date %>"></label>
+		<br><label>Number of hours: <input type="text" value="1"</label>
+
+	<p><button class="track">Track</button>
 </script>
+
 
 <script type="text/template" id="readmeView">
 	<p><a href="#tasks">Back to open tasks</a>
 
 	<%= readmeHtml %>
 </script>
+
 
 <script>
 Tm.start(<?= json_encode([

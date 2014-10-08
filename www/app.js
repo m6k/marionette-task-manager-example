@@ -24,42 +24,65 @@ Tm.Tasks = Backbone.Collection.extend({
 Tm.TaskView = Marionette.ItemView.extend({
 	template: '#taskView',
 	events: {
-		'click .close': 'close',
-		'click .edit': 'edit', // same action as clicking on task name
+		'click .close': 'closeTask',
+		'click .edit': 'edit',
+		'click .track': 'track',
 	},
-	close: function () {
+	closeTask: function () {
 		this.model.save({status: "closed"});
 		Tm.tasks.remove(this.model);
 	},
 	edit: function () {
 		Tm.router.navigate('/tasks/' + this.model.id + '/edit', {trigger: true});
 	},
+	track: function () {
+		Tm.router.navigate('/tasks/' + this.model.id + '/track', {trigger: true});
+	},
 });
+
 
 Tm.NoTasksView = Marionette.ItemView.extend({
 	template: '#noTasksView',
 });
 
+
 Tm.TasksView = Marionette.CompositeView.extend({
 	template: '#tasksView',
-	childViewContainer: '.tasks',
+	childViewContainer: '.taskList',
 	childView: Tm.TaskView,
 	emptyView: Tm.NoTasksView,
+	onRender: function () {
+		// always try to load new tasks from server
+		this.collection.fetch();
+	}
 });
 
 
-Tm.TaskDetailView = Marionette.ItemView.extend({
+Tm.TaskTimeEmptyView = Marionette.ItemView.extend({
+	template: '#taskTimeEmptyView',
+	tagName: 'tr',
+});
+
+
+Tm.TaskTimeView = Marionette.ItemView.extend({
+	tagName: 'tr',
+	template: '#taskTimeView',
+});
+
+
+Tm.TaskDetailView = Marionette.CompositeView.extend({
 	template: '#taskDetailView',
 	events: {
-		'click .close': 'close',
+		'click .close': 'closeTask',
 		'click .edit': 'edit',
+		'click .track': 'track',
 	},
 	templateHelpers: function () {
 		return {
 			contentHtml: _.escape(this.model.get('content')).replace(/\n/g, "<br\n"),
 		}
 	},
-	close: function () {
+	closeTask: function () {
 		this.model.save({status: "closed"});
 		Tm.tasks.remove(this.model);
 		Tm.router.navigate('/tasks', {trigger: true});
@@ -67,8 +90,28 @@ Tm.TaskDetailView = Marionette.ItemView.extend({
 	edit: function () {
 		Tm.router.navigate('/tasks/' + this.model.id + '/edit', {trigger: true});
 	},
+	track: function () {
+		Tm.router.navigate('/tasks/' + this.model.id + '/track', {trigger: true});
+	},
+	initialize: function () {
+		this.collection = new (Backbone.Collection.extend({
+			url: this.model.url() + '/time',
+		}))();
+	},
+	childViewContainer: '.time',
+	childView: Tm.TaskTimeView,
+	emptyView: Tm.TaskTimeEmptyView,
+	onRender: function () {
+		this.collection.fetch();
+	},
+	collectionEvents: {
+		'sync': 'timeLoaded',
+	},
+	timeLoaded: function () {
+		this.$('.loadingInfo').hide();
+		this.$('.timeTable').removeClass('loading');
+	},
 });
-
 
 
 Tm.EditOrCreateTaskView = Marionette.ItemView.extend({
@@ -107,7 +150,6 @@ Tm.EditOrCreateTaskView = Marionette.ItemView.extend({
 Tm.EditTaskView = Tm.EditOrCreateTaskView.extend({
 	templateHelpers: function () {
 		return {
-			cid: this.model.id,
 			pageTitle: 'Edit task',
 			action: 'Save',
 		};
@@ -118,11 +160,20 @@ Tm.EditTaskView = Tm.EditOrCreateTaskView.extend({
 Tm.CreateTaskView = Tm.EditOrCreateTaskView.extend({
 	templateHelpers: function () {
 		return {
-			cid: this.model.cid,
 			pageTitle: 'Create new task',
 			action: 'Create new task',
 		};
 	},
+});
+
+
+Tm.TaskTrackView = Marionette.ItemView.extend({
+	template: '#taskTrackView',
+	templateHelpers: function () {
+		return {
+			date: (new Date()).toDateString(),
+		}
+	}
 });
 
 
@@ -137,6 +188,7 @@ Tm.Router = Marionette.AppRouter.extend({
 		'tasks': 'tasks',
 		'tasks/:id': 'task',
 		'tasks/:id/edit': 'taskEdit',
+		'tasks/:id/track': 'taskTrack',
 		'create': 'create',
 		'readme': 'readme',
 	},
@@ -147,6 +199,7 @@ Tm.Controller = Marionette.Controller.extend({
 	index: function () {
 		Tm.router.navigate('/tasks', {trigger: true});
 	},
+
 	tasks: function () {
 		Tm.content.show(new Tm.TasksView({
 			collection: Tm.tasks,
@@ -155,7 +208,6 @@ Tm.Controller = Marionette.Controller.extend({
 
 	_getTask: function (id) {
 		var task = Tm.tasks.get(id);
-
 		if (!task) {
 			alert('task not found'); // superior error handling ftw
 			Tm.router.naviget('/tasks', {trigger: true});
@@ -173,6 +225,12 @@ Tm.Controller = Marionette.Controller.extend({
 
 	taskEdit: function (id) {
 		Tm.content.show(new Tm.EditTaskView({
+			model: this._getTask(id),
+		}));
+	},
+
+	taskTrack: function (id) {
+		Tm.content.show(new Tm.TaskTrackView({
 			model: this._getTask(id),
 		}));
 	},

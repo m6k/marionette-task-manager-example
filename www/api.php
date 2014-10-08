@@ -31,6 +31,14 @@ $app->put('/tasks/:id', function ($id) use ($app, $tasks) {
 	$app->render(200, (array)$tasks->save(new \Tm\Task($data)));
 });
 
+$app->get('/tasks/:id/time', function () use ($app, $tasks) {
+
+	$app->render(200, array(
+		array('id' => 1, 'date' => 'ddd', 'hours' => 2),
+		array('id' => 2, 'date' => 'ass', 'hours' => 2),
+	));
+});
+
 
 
 
