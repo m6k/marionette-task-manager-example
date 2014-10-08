@@ -1,11 +1,14 @@
 <?php
 
+namespace Tm;
 
-$container = require __DIR__ .'/../bootstrap.php';
-$config = $container->config;
-$tasks = $container->taskStorage;
+require __DIR__ .'/../bootstrap.php';
+
+$container = new Container(loadConfig());
+enableTracy($container);
+
 $readmeHtml = \Michelf\Markdown::defaultTransform(
-	file_get_contents($container->rootDir.'/README.md')
+	file_get_contents(__DIR__. '/../README.md')
 );
 
 
@@ -134,8 +137,8 @@ $readmeHtml = \Michelf\Markdown::defaultTransform(
 
 <script>
 Tm.start(<?= json_encode([
-	'apiUrl' => $config['apiUrl'],
-	'tasks' => $tasks->listOpen(),
+	'apiUrl' => $container->apiUrl,
+	'tasks' => $container->taskStorage->listOpen(),
 	'readmeHtml' => $readmeHtml,
 ]); ?>);
 </script>

@@ -10,25 +10,31 @@ Dependencies:
 - decent browser, I think first thing to break will be IE 8 and trailing commas in object literals,
   this can be fixed by using CoffeeScript (and it would get me plus point..)
 
-- to get composer dependencies (commands below must run from project root):
+- create conf/local.json file with {"environment": "devel"}
+  - this file defines what environment config should be used
+  - it would contain any passwords which must not be versioned in git
 
-	`composer install`
+- get composer dependencies (all commands below must run from project root):
+
+	`composer install --dev`
 
 - to run local server
 
 	`php -S 127.0.0.1:8080 -t www`
 
+- to run tests (it needs both mysql and redis, and it clears all data before run!)
+
+	`vendor/bin/phpunit`
+
+
 ## Todo
 
-1. time tracking
-1. storage tests
 1. mysql storage
 1. deploy to vps, publish git repo read only over http?
 
 -- release ---
 
 1. Maybe at least <em>some</em> styles?
-1. List closed tasks.
 1. Describe basic architectural decisions.
 1. hhvm. I would love to play with it for a while
 1. react-js for js views instead of marionette views

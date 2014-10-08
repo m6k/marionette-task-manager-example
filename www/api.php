@@ -1,9 +1,14 @@
 <?php
 
-$container = require __DIR__ .'/../bootstrap.php';
+namespace Tm;
+
+require __DIR__ .'/../bootstrap.php';
+
+$container = new Container(loadConfig());
+enableTracy($container);
 
 $app = new \Slim\Slim();
-$app->view(new Tm\JsonView());
+$app->view(new JsonView());
 
 $tasks = $container->taskStorage;
 
@@ -18,7 +23,7 @@ $app->post('/tasks', function () use ($app, $tasks) {
 
 	$data = json_decode($app->request->getBody(), true);
 
-	$app->render(200, (array)$tasks->create(new \Tm\Task($data)));
+	$app->render(200, (array)$tasks->create(new \Task($data)));
 });
 
 
@@ -26,7 +31,7 @@ $app->put('/tasks/:id', function ($id) use ($app, $tasks) {
 
 	$data = json_decode($app->request->getBody(), true);
 
-	$app->render(200, (array)$tasks->save(new \Tm\Task($data)));
+	$app->render(200, (array)$tasks->save(new \Task($data)));
 });
 
 
@@ -47,7 +52,7 @@ $app->post('/tasks/:id/time', function ($id) use ($app, $tasks) {
 		return $app->render(400, array('message' => 'invalid input'));
 	}
 	$data['hours'] = (int)$data['hours'];
-	$taskTime = new \Tm\TaskTime($data);
+	$taskTime = new TaskTime($data);
 
 	$task = $tasks->loadById($id);
 	if (!$task) {

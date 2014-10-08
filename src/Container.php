@@ -10,13 +10,10 @@ use Tracy\Debugger;
 class Container
 {
 
-	public function __construct()
+	public function __construct($config)
 	{
-		if ($this->config['devel']) {
-			Debugger::enable($this->config['devel']
-				? Debugger::DEVELOPMENT
-				: Debugger::PRODUCTION
-			);
+		foreach ($config as $key => $value) {
+			$this->$key = $value;
 		}
 	}
 
@@ -37,38 +34,15 @@ class Container
 		return isset($this->$name) || method_exists($this, "new$name");
 	}
 
-
-	protected function newRootDir()
-	{
-		return realpath(__DIR__ .'/../');
-	}
-
-
-	private function readConfig($name)
-	{
-		return json_decode(file_get_contents($this->rootDir ."/conf/$name.json"), true);
-	}
-
-
-	protected function newConfig()
-	{
-		$local = $this->readConfig('local');
-		$environment = $this->readConfig($local['environment']);
-		$common = $this->readConfig('config');
-
-		return array_merge($common, $environment, $local);
-	}
-
-
 	protected function newTaskStorage()
 	{
-		return $this->{$this->config['taskStorage']};
+		return $this->{$this->taskStorageService};
 	}
 
 
 	protected function newPredis()
 	{
-		return new \Predis\Client($this->config['redisUri']);
+		return new \Predis\Client($this->redisUri);
 	}
 
 

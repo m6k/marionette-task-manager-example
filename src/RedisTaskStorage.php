@@ -2,7 +2,7 @@
 
 namespace Tm;
 
-class RedisTaskStorage
+class RedisTaskStorage implements TaskStorage
 {
 	const KEY_TASKS = 'Tasks';
 	const KEY_TASK_HOURS = 'TaskHours:';
