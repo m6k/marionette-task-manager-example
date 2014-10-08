@@ -105,6 +105,10 @@ Tm.CreateTaskView = Tm.EditOrCreateTaskView.extend({
 });
 
 
+Tm.ReadmeView = Marionette.ItemView.extend({
+	template: '#readmeView',
+});
+
 
 Tm.Router = Marionette.AppRouter.extend({
 	appRoutes: {
@@ -112,6 +116,7 @@ Tm.Router = Marionette.AppRouter.extend({
 		'tasks': 'tasks',
 		'tasks/:id': 'taskEdit',
 		'create': 'create',
+		'readme': 'readme',
 	},
 });
 
@@ -142,11 +147,16 @@ Tm.Controller = Marionette.Controller.extend({
 	},
 
 	create: function () {
-		console.log('create');
 		var task = new Tm.Task();
 
 		Tm.content.show(new Tm.CreateTaskView({
 			model: task,
+		}));
+	},
+
+	readme: function () {
+		Tm.content.show(new Tm.ReadmeView({
+			model: new Backbone.Model({readmeHtml: Tm.readmeHtml}),
 		}));
 	},
 });
@@ -155,6 +165,7 @@ Tm.Controller = Marionette.Controller.extend({
 Tm.addInitializer(function (options) {
 	console.log('starting app', options);
 	this.apiUrl = options.apiUrl;
+	this.readmeHtml = options.readmeHtml;
 	this.tasks = new Tm.Tasks(options.tasks);
 
 	this.addRegions({

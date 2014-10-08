@@ -9,7 +9,8 @@
     "require": {
     	"slim/slim": "2.*",
         "tracy/tracy": "~2.2",
-        "predis/predis": "~1.0"
+        "predis/predis": "~1.0",
+        "michelf/php-markdown": "~1.4"
     },
     "autoload": {
         "psr-4": {"Tm\\": "src/"}

@@ -1,8 +1,14 @@
 <?php
 
+
 $container = require __DIR__ .'/../bootstrap.php';
 $config = $container->config;
 $tasks = $container->taskStorage;
+
+$readmeHtml = \Michelf\Markdown::defaultTransform(
+	file_get_contents($container->rootDir.'/README.md')
+);
+
 
 ?><!DOCTYPE html>
 <html>
@@ -31,6 +37,7 @@ $tasks = $container->taskStorage;
 
 <script type="text/template" id="tasksView">
 	<p><a href="#create">New task</a>
+		<a href="#readme">View readme</a>
 
 	<h2>Open Tasks</h2>
 
@@ -63,10 +70,17 @@ $tasks = $container->taskStorage;
 		<button class="close">close</button>
 </script>
 
+<script type="text/template" id="readmeView">
+	<p><a href="#tasks">Back to open tasks</a>
+
+	<%= readmeHtml %>
+</script>
+
 <script>
 Tm.start(<?= json_encode([
 	'apiUrl' => $config['apiUrl'],
 	'tasks' => $tasks->listOpen(),
+	'readmeHtml' => $readmeHtml,
 ]); ?>);
 </script>
 
