@@ -5,7 +5,7 @@ See it in action http://task-manager.m6k.cz
 
 Dependencies:
 
-- php 5.4 or newer
+- php 5.4 or newer, probably would run on 5.3 as well
 - [composer](https://getcomposer.org/)
 - create conf/local.json file with {"environment": "devel"}
   - this file defines what environment config should be used
@@ -13,7 +13,9 @@ Dependencies:
 - redis - running on 127.0.0.1 without any authorization
 - mysql - create database taskmanager and init it with sql/structure.sql
   - fill username/password to conf/local.ini (example in conf/config.json)
-- decent browser, I think first thing to break will be IE 8 and trailing commas in object literals,
+- to switch between storage imlementation use "taskStorageService":"redisTaskStorage" or "mysqlTaskStorage"
+  in conf/local.json
+- use decent browser, I believe first thing to break will be IE 8 and trailing commas in object literals,
   this can be fixed by using CoffeeScript (and it would get me plus point..)
 
 
