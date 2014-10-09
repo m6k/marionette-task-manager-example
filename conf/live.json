@@ -1,4 +1,4 @@
 {
-	"apiUrl": "http://task-manager.m6k.cz",
+	"apiUrl": "http://task-manager.m6k.cz/api.php",
 	"devel": false
 }

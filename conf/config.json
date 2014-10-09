@@ -1,6 +1,6 @@
 {
 	"taskStorageService": "redisTaskStorage",
-	"redisUri": "tcp://localhost:6379",
+	"redisUri": "tcp://127.0.0.1:6379",
 	"mysqlPdoConnectionString": "mysql:dnname=taskmanager",
 	"mysqlUser": "taskmanager",
 	"mysqlPassword": "taskmanager"

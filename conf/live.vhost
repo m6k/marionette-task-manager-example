@@ -1,8 +1,8 @@
 
-<VirtualHost *:80>
-    ServerAlias task-manager.dev
+<VirtualHost *>
+    ServerAlias task-manager.m6k.cz
 
-    DocumentRoot /Users/jan/vcs/task-manager/www
+    DocumentRoot /home/jan/webs/task-manager/www
 
 	AddHandler php5-script .php
 	AddType text/html .php
