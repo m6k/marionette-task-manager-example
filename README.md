@@ -1,6 +1,4 @@
 
-See it in action http://task-manager.m6k.cz
-
 ## Setup on local computer
 
 Dependencies:
