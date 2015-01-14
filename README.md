@@ -1,3 +1,32 @@
+# Requirements - Task Manager
+
+This was the task assignment:
+
+> You should create web application. This application should be simple task manager. Consisting of:
+>
+> * Create Task
+> * Edit Task
+> * Report Time
+> * Close Task
+> * List Tasks
+>
+> Your solution have to be JS based client. That communicates with PHP based backend. Over JSON based API (REST or REST
+> like). This backend should write and read data from/to at least two persistent data storing layers based on
+> configuration. Those layers have to have same access interface. One of those persistent layers have to be SQL database.
+> Second persistent layer you are free to chose (not SQL database). Using OOP on LAMP architecture. No need for data
+> validation only sanitize to avoid security risks.
+>
+> You shouldn’t spent more than 8 hours on this test. Send us code in git repository. Including Readme file with deploy
+> instructions and any data files necessary for deployment.
+
+# Result
+
+The hard part was the eight hour limit - and I literally did not have more time anyway. I did not have enough hands-on
+experience with starting project with any "big" framework like Symfony at the time, so I decided to use
+[Slim](http://www.slimframework.com/) instead, and then I made more questionable choices along the way just to speed
+things up - e.g. I wrote [my own DI
+container](https://github.com/m6k/marionette-task-manager-example/blob/master/src/Container.php), while it would be
+better to use existing one, e.g. [Pimple](http://pimple.sensiolabs.org/).
 
 ## Setup on local computer
 
@@ -33,8 +62,5 @@ Dependencies:
 ## What would be my next steps if I had more time?
 
 1. Maybe at least <em>some</em> styles?
-1. Describe basic architectural decisions.
-1. hhvm. I would love to play with it for a while
 1. pushState so that urls does not use fragments
-1. coffeescript
 1. code sniffer / linter for both php and js, minify js
