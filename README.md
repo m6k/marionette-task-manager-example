@@ -64,3 +64,4 @@ Dependencies:
 1. Maybe at least <em>some</em> styles?
 1. pushState so that urls does not use fragments
 1. code sniffer / linter for both php and js, minify js
+
